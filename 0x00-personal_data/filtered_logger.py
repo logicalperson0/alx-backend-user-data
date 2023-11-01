@@ -32,6 +32,6 @@ class RedactingFormatter(logging.Formatter):
 def filter_datum(fields, redaction, message, separator):
     """returns the log message obfuscated"""
     for fx in fields:  # This is ex: password={redaction}; OR password=xxx;
-        message = re.sub(f'{fx}=(.*?){separator}',
+        message = re.sub(f'{fx}=.+?{separator}',
                          f'{fx}={redaction}{separator}', message)
     return message
