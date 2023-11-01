@@ -22,18 +22,16 @@ class RedactingFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         """to filter values in incoming log records using filter_datum"""
-        #rec = record.__dict__
+        # rec = record.__dict__
         filtered = filter_datum(self.fields, RedactingFormatter.REDACTION,
-                                record.getMessage(), RedactingFormatter.SEPARATOR)
+                                record.getMessage(),
+                                RedactingFormatter.SEPARATOR)
         return super(RedactingFormatter, self).format(record)
 
 
 def filter_datum(fields, redaction, message, separator):
     """returns the log message obfuscated"""
-    """Since, we have more than 1 pattern to match:"""
-    for fx in fields:
-        """This is ex: password={redaction}; OR password=xxx;"""
-        message = re.sub(f'{fx}=(.+?){separator}',
+    for fx in fields:  # This is ex: password={redaction}; OR password=xxx;
+        message = re.sub(f'{fx}=(.*?){separator}',
                          f'{fx}={redaction}{separator}', message)
-    
     return message
