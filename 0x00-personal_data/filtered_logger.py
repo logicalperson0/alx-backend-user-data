@@ -9,7 +9,7 @@ import os
 import mysql.connector
 
 
-PII_FIELDS = ('name', 'ssn', 'password', 'email', 'phone')
+PII_FIELDS = ('name','email', 'phone', 'ssn', 'password')
 
 
 def filter_datum(fields: List[str], redaction: str,
@@ -46,8 +46,8 @@ class RedactingFormatter(logging.Formatter):
 
 def get_logger() -> logging.Logger:
     """returns a logging.Logger object"""
-    # name = "user_data"
-    log_pii = logging.get_logger('user_data')
+    name = "user_data"
+    log_pii = logging.get_logger(name)
     log_pii.setLevel(logging.INFO)
     log_pii.propagate = False
     stream = logging.StreamHandler()
@@ -69,4 +69,4 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
                                                        host=HOST,
                                                        database=MY_DB)
 
-    return mydb
+    return my_db
