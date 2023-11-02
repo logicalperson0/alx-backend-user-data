@@ -9,7 +9,7 @@ import os
 import mysql.connector
 
 
-PII_FIELDS = ('name','email', 'phone', 'ssn', 'password')
+PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
 
 
 def filter_datum(fields: List[str], redaction: str,
@@ -50,8 +50,9 @@ def get_logger() -> logging.Logger:
     log_pii = logging.get_logger(name)
     log_pii.setLevel(logging.INFO)
     log_pii.propagate = False
+
     stream = logging.StreamHandler()
-    stream.setFormatter(RedactingFormatter)
+    stream.setFormatter(RedactingFormatter(list(PII_FIELDS)))
     log_pii.addHandler(stream)
 
     return log_pii
