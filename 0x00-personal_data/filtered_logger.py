@@ -47,7 +47,7 @@ class RedactingFormatter(logging.Formatter):
 def get_logger() -> logging.Logger:
     """returns a logging.Logger object"""
     name = "user_data"
-    log_pii = logging.get_logger(name)
+    log_pii = logging.getLogger(name)
     log_pii.setLevel(logging.INFO)
     log_pii.propagate = False
 
@@ -60,10 +60,10 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """returns a connector to the database"""
-    USER = os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
-    PASSWORD = os.environ.get('PERSONAL_DATA_DB_PASSWORD', '')
-    HOST = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
-    MY_DB = os.environ.get('PERSONAL_DATA_DB_NAME')
+    USER = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    PASSWORD = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    HOST = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    MY_DB = os.getenv('PERSONAL_DATA_DB_NAME')
 
     my_db = mysql.connector.connection.MySQLConnection(user=USER,
                                                        password=PASSWORD,
@@ -71,3 +71,27 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
                                                        database=MY_DB)
 
     return my_db
+
+
+def main():
+    """will obtain a database connection using get_db and retrieve
+    all rows in the users table and display each row under
+    a filtered format"""
+    get_users = get_db()
+    cursor = get_users.cursor()
+
+    cursor.execute('SELECT * FROM users;')
+    
+    field_names = [f[0] for f in cursor.description]
+    log_pii = get_logger()
+
+    for r in cursor:
+        infos = ''
+        for x, y in zip(r, field_names):
+            infos += f'{y}={(x)};'
+        log_pii.info(infos)
+    
+    cursor.close()
+
+if __name__ == '__main__':
+    main()
