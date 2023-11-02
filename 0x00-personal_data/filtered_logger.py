@@ -81,7 +81,7 @@ def main():
     cursor = get_users.cursor()
 
     cursor.execute('SELECT * FROM users;')
-    
+
     field_names = [f[0] for f in cursor.description]
     log_pii = get_logger()
 
@@ -90,8 +90,9 @@ def main():
         for x, y in zip(r, field_names):
             infos += f'{y}={(x)};'
         log_pii.info(infos)
-    
+
     cursor.close()
+
 
 if __name__ == '__main__':
     main()
