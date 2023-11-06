@@ -34,3 +34,13 @@ def abort() -> str:
     """
     from api.v1.app import unauthorized
     return unauthorized(401)
+
+
+@app_views.route('/forbidden', methods=['GET'], strict_slashes=False)
+def forbidden() -> str:
+    """GET /api/v1/forbidden
+    Return:
+      raise a 403 error by using abort
+    """
+    from api.v1.app import forbidden
+    return forbidden(403)
