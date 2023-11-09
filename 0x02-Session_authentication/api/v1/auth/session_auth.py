@@ -44,7 +44,7 @@ class SessionAuth(Auth):
         if not sess_id:
             return False
 
-        curr_user = self.user_id_for_session_id(sess_id)
+        curr_user = self.user_id_for_session_id[sess_id]
         if not curr_user:
             return False
         else:
