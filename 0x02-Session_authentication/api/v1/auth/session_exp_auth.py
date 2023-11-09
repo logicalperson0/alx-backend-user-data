@@ -34,9 +34,9 @@ class SessionExpAuth(SessionAuth):
         """return user_id from the session dictionary"""
         if session_id is None:
             return None
-        if session_id not in user_id_by_session_id.keys():
+        if session_id not in self.user_id_by_session_id.keys():
             return None
-        
+
         sess_user = self.user_id_by_session_id.get(session_id)
         sess_userid = sess_user.get('user_id')
         if self.session_duration <= 0:
