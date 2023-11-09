@@ -21,15 +21,15 @@ def login() -> str:
     # pwd = request.form.get('password')
 
     if not email or email == '':
-        abort(jsonify({'error': 'email missing'}), 400)
+        return abort(jsonify({'error': 'email missing'}), 400)
 
     pwd = request.form.get('password')
     if not pwd or pwd == '':
-        abort(jsonify({'error': 'password missing'}), 400)
+        return abort(jsonify({'error': 'password missing'}), 400)
 
     user_em = User.search({'email': email})
     if len(user_em) == 0:
-        abort(jsonify({'error': 'no user found for this email'}), 404)
+        return abort(jsonify({'error': 'no user found for this email'}), 404)
 
     from api.v1.app import auth
     for u in user_em:
