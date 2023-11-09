@@ -3,6 +3,8 @@
 """
 from api.v1.auth.auth import Auth
 from uuid import uuid4
+from models.user import User
+from typing import TypeVar
 
 
 class SessionAuth(Auth):
@@ -24,3 +26,11 @@ class SessionAuth(Auth):
         if session_id is None or type(session_id) != str:
             return None
         return self.user_id_by_session_id.get(session_id)
+
+    def current_user(self, request=None):
+        """(overload) that returns a User instance based on a cookie value"""
+        sess_id = self.session_cookie(request)
+        curr_id = self.user_id_for_session_id(sess_id)
+        user_by_id = User.get(curr_id)
+
+        return user_by_id
