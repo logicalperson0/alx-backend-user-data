@@ -28,7 +28,7 @@ def login() -> str:
         abort(jsonify({'error': 'password missing'}), 400)
 
     user_em = User.search({'email': email})
-    if user_em is None:
+    if len(user_em) == 0:
         abort(jsonify({'error': 'no user found for this email'}), 404)
 
     from api.v1.app import auth
