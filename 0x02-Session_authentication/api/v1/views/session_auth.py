@@ -37,7 +37,7 @@ def login() -> str:
         if u.is_valid_password(pwd):
             sess_id = auth.create_session(u.id)
             SESSION_NAME = os.getenv('SESSION_NAME')
-            response = make_response(jsonify({}))
+            response = make_response(u.to_json())
             response.set_cookie(SESSION_NAME, sess_id)
 
             return response
