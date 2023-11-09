@@ -2,9 +2,9 @@
 """ Module of session_exp_auth views
 """
 from api.v1.auth.session_auth import SessionAuth
+from datetime import datetime, timedelta
 from models.user import User
 import os
-from datetime import datetime, timedelta
 
 
 class SessionExpAuth(SessionAuth):
