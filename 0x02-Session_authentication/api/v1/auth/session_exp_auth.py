@@ -36,7 +36,7 @@ class SessionExpAuth(SessionAuth):
             return None
         if session_id not in user_id_by_session_id.keys():
             return None
-        if self.session_duration is <= 0:
+        if self.session_duration <= 0:
             return self.user_id_by_session_id.get(session_id).get('user_id')
 
         cr_time = self.user_id_by_session_id.get(session_id).get('created_at')
