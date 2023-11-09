@@ -43,9 +43,6 @@ class SessionExpAuth(SessionAuth):
         if cr_time is None:
             return None
 
-        if (cr_time + self.session_duration) < datetime.now():
-            return None
-
         ex_time = cr_time + timedelta(seconds=self.session_duration)
         if ex_time < datetime.now():
             return None
