@@ -51,15 +51,11 @@ class DB:
         filtered by the method's input arguments"""
         query = self._session.query(User)
 
-        for key, value in kwargs.items():
-            if not hasattr(User, key):
-                raise InvalidRequestError
-            query = query.filter(getattr(User, key) == value)
         try:
-            query = query.first()
+            query = query.filter_by(**kwargs).one()
 
-        except InvalidRequestError:
-            raise InvalidRequestError
-        if query is None:
-            raise NoResultFound
+        #except InvalidRequestError:
+        #    raise InvalidRequestError()
+        except NoResultFound:
+            raise NoResultFound()
         return query
