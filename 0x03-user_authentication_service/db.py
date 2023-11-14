@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """DB module
 """
+import logging
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -10,6 +11,8 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from user import Base
 from user import User
+
+logging.disable(logging.WARNING)
 
 
 class DB:
@@ -46,12 +49,17 @@ class DB:
     def find_user_by(self, **kwargs):
         """returns the first row found in the users table as
         filtered by the method's input arguments"""
-        query = self._session
+        query = self._session.query(User)
+
+        for key, value in kwargs.items():
+            if not hasattr(User, key):
+                raise InvalidRequestError
+            query = query.filter(getattr(User, key) == value)
         try:
-            user = query.query(User).filter_by(**kwargs).one()
-        except NoResultFound:
-            raise NoResultFound()
+            query = query.first()
+
         except InvalidRequestError:
-            raise InvalidRequestError()
-        
-        return user
+            raise InvalidRequestError
+        if query is None:
+            raise NoResultFound
+        return query
