@@ -57,7 +57,6 @@ class DB:
         # except InvalidRequestError:
         #    raise InvalidRequestError()
         except NoResultFound:
-            raise NoResultFound
-        except InvalidRequestError:
-            raise InvalidRequestError
+            raise NoResultFound()
+
         return query
