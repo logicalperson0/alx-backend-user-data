@@ -46,17 +46,12 @@ class DB:
     def find_user_by(self, **kwargs):
         """returns the first row found in the users table as
         filtered by the method's input arguments"""
-        query = self._session.query(User)
-
-        for key, value in kwargs.items():
-            if not hasattr(User, key):
-                raise InvalidRequestError
-            query_f = query.filter(getattr(User, key) == value)
+        query = self._session
         try:
-            query_l = query_f.first()
-
+            user = query.query(User).filter_by(**kwargs).one()
+        except NoResultFound:
+            raise NoResultFound()
         except InvalidRequestError:
-            raise InvalidRequestError
-        if query_l is None:
-            raise NoResultFound
-        return query_l
+            raise InvalidRequestError()
+        
+        return user
