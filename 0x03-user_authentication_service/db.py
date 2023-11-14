@@ -37,13 +37,10 @@ class DB:
         """returns a User object.
         The method saves the user to the database"""
         new_user = User(email=email, hashed_password=hashed_password)
-        try:
-            self._session.add(new_user)
-            self._session.commit()
-        except Exception as e:
-            print(f"Error adding user to database: {e}")
-            self._session.rollback()
-            raise
+
+        self._session.add(new_user)
+        self._session.commit()
+
         return new_user
 
     def find_user_by(self, **kwargs):
@@ -54,12 +51,12 @@ class DB:
         for key, value in kwargs.items():
             if not hasattr(User, key):
                 raise InvalidRequestError
-            query = query.filter(getattr(User, key) == value)
+            query_f = query.filter(getattr(User, key) == value)
         try:
-            query = query.first()
+            query_l = query_f.first()
 
         except InvalidRequestError:
             raise InvalidRequestError
-        if query is None:
+        if query_l is None:
             raise NoResultFound
-        return query
+        return query_l
