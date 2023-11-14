@@ -52,11 +52,11 @@ class DB:
         query = self._session.query(User)
 
         try:
-            query = query.filter_by(**kwargs).one()
+            query_fil = query.filter_by(**kwargs).one()
 
         # except InvalidRequestError:
         #    raise InvalidRequestError()
         except NoResultFound:
-            raise NoResultFound()
+            raise NoResultFound
 
-        return query
+        return query_fil
