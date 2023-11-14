@@ -54,8 +54,10 @@ class DB:
         try:
             query = query.filter_by(**kwargs).one()
 
-        #except InvalidRequestError:
+        # except InvalidRequestError:
         #    raise InvalidRequestError()
         except NoResultFound:
-            raise NoResultFound()
+            raise NoResultFound
+        except InvalidRequestError:
+            raise InvalidRequestError
         return query
