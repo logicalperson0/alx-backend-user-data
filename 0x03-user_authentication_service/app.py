@@ -2,7 +2,7 @@
 """
 flask app module
 """
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from auth import Auth
 from user import User
 
@@ -34,6 +34,19 @@ def users():
 
     except exception:
         return jsonify({"message": "email already registered"}), 400
+
+
+@app.route('/sessions', methods=['POST'])
+def login():
+    """return a JSON payload of the form"""
+    email = request.form.get('email')
+    pwd = request.form.get('password')
+
+    try:
+        new_sess = AUTH.create_session(email)
+        return jsonify({"email": "{}".format(email), "message": "logged in"})
+    except NoResultFound:
+        abort(401)
 
 
 if __name__ == "__main__":
