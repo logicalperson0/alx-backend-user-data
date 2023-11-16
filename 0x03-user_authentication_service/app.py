@@ -2,9 +2,12 @@
 """
 flask app module
 """
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+from auth import Auth
+from user import User
 
 
+AUTH = Auth()
 app = Flask(__name__)
 
 
@@ -16,6 +19,21 @@ def hello():
       - JSON payload
     """
     return jsonify({"message": "Bienvenue"})
+
+
+@app.route('/users', methods=['POST'])
+def users():
+    """implements the POST /users route"""
+    email = request.form.get('email')
+    pwd = request.form.get('password')
+
+    try:
+        new_user = AUTH.register_user(email, pwd)
+        return jsonify({"email": "{}".format(email),
+                        "message": "user created"})
+
+    except exception:
+        return jsonify({"message": "email already registered"}), 400
 
 
 if __name__ == "__main__":
