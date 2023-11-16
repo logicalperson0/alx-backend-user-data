@@ -85,6 +85,19 @@ class Auth:
         except Exception:
             raise ValueError
 
+    def update_password(self, reset_token: str, password: str) -> None:
+        """updates the user’s hashed_password field with the
+        new hashed password and the reset_token field to None."""
+        try:
+            get_user = self._db.find_user_by(reset_token=reset_token)
+            if get_user:
+                hash_pwd = _hash_password(password)
+                get_user.hashed_password = hash_pwd
+                get_user.reset_token = None
+                return None
+        except Exception:
+            raise ValueError
+
 
 def _hash_password(password: str) -> bytes:
     """The returned bytes is a salted hash of the input
