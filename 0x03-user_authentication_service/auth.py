@@ -64,10 +64,7 @@ class Auth:
 
     def destroy_session(self, user_id: int) -> None:
         """The method updates the corresponding user’s session ID to None"""
-        des_user = self._db.find_user_by(user_id=id)
-        if des_user:
-            des_user.session_id = None
-            return None
+        des_user = self._db.update_user(user_id=id, session_id=None)
         return None
 
 
