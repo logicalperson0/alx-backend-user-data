@@ -73,6 +73,18 @@ class Auth:
         except Exception:
             return None
 
+    def get_reset_password_token(self, email: str) -> str:
+        """generate a UUID and update the user’s
+        reset_token database field"""
+        try:
+            get_user = self._db.find_user_by(email=email)
+            if get_user:
+                token = _generate_uuid()
+                get_user.reset_token = token
+                return token
+        except Exception:
+            raise ValueError
+
 
 def _hash_password(password: str) -> bytes:
     """The returned bytes is a salted hash of the input
