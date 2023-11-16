@@ -2,7 +2,7 @@
 """
 flask app module
 """
-from flask import Flask, jsonify, request, abort, make_response
+from flask import Flask, jsonify, request, abort, make_response, redirect
 from auth import Auth
 from user import User
 
@@ -50,6 +50,18 @@ def login():
     res = make_response(jsonify({"email": email, "message": "logged in"}))
     res.set_cookie('session_id', new_sess)
     return res
+
+
+@app.route('/sessions', methods=['DELETE'])
+def logout():
+    """respond to the DELETE /sessions route"""
+    sess_id = request.cookies.get('session_id')
+
+    out_user = AUTH.get_user_from_session_id(sess_id)
+    if out_user is None:
+        abort(403)
+    AUTH.destroy_session(out_user)
+    return redirect('/')
 
 
 if __name__ == "__main__":
