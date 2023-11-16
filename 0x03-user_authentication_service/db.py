@@ -50,9 +50,9 @@ class DB:
     def find_user_by(self, **kwargs: Dict[str, str]) -> User:
         """returns the first row found in the users table as
         filtered by the method's input arguments"""
-        query = self._session.query(User)
-
         try:
+            query = self._session.query(User)
+
             query_fil = query.filter_by(**kwargs).one()
 
         except NoResultFound:
