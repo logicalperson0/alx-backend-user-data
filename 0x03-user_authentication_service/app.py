@@ -41,6 +41,8 @@ def login():
     """return a JSON payload of the form"""
     email = request.form.get('email')
     pwd = request.form.get('password')
+    if not AUTH.valid_login(email, pwd):
+        abort(401)
 
     try:
         new_sess = AUTH.create_session(email)
