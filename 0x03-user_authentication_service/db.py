@@ -52,17 +52,17 @@ class DB:
         filtered by the method's input arguments"""
         if kwargs is None:
             raise InvalidRequestError
-        query = self._session.query(User)
-
+        for k in kwargs.keys():
+            if not hasattr(User, k):
+                raise InvalidRequestError
         try:
-            query_fil = query.filter_by(**kwargs).one()
-
-        except NoResultFound:
-            raise NoResultFound()
+            query = self._session.query(User).filter_by(**kwargs).first()
         except InvalidRequestError:
-            raise InvalidRequestError()
-
-        return query_fil
+            raise InvalidRequestError
+        if query is None:
+            raise NoResultFound
+        else:
+            return query
 
     def update_user(self, user_id: int, **kwargs: Dict[str, str]) -> None:
         """method that takes as argument a required user_id
