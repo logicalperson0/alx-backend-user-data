@@ -50,13 +50,13 @@ class DB:
     def find_user_by(self, **kwargs: Dict[str, str]) -> User:
         """returns the first row found in the users table as
         filtered by the method's input arguments"""
+        if kwargs is None:
+            raise InvalidRequestError
         query = self._session.query(User)
 
         try:
             query_fil = query.filter_by(**kwargs).one()
 
-        # except InvalidRequestError:
-        #    raise InvalidRequestError()
         except NoResultFound:
             raise NoResultFound()
         except InvalidRequestError:
@@ -67,4 +67,12 @@ class DB:
     def update_user(self, user_id: int, **kwargs: Dict[str, str]) -> None:
         """method that takes as argument a required user_id
         integer and arbitrary keyword arguments, and returns None"""
-        
+        find_user = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if not hasattr(find_user, key):
+                raise ValueError
+            else:
+                setattr(find_user, key, value)
+
+        self._session.commit()
+        return None
