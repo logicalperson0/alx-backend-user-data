@@ -2,7 +2,7 @@
 """
 flask app module
 """
-from flask import Flask, jsonify, request, abort, response
+from flask import Flask, jsonify, request, abort, make_response
 from auth import Auth
 from user import User
 
@@ -43,15 +43,13 @@ def login():
     pwd = request.form.get('password')
     if not AUTH.valid_login(email, pwd):
         abort(401)
-
-    try:
-        new_sess = AUTH.create_session(email)
-
-        res = jsonify({"email": "{}".format(email), "message": "logged in"})
-        res.set_cookie('session_id', new_sess)
-        return res
-    except NoResultFound:
+    new_sess = AUTH.create_session(email)
+    if not new_sess:
         abort(401)
+
+    res = make_response(jsonify({"email": email, "message": "logged in"}))
+    res.set_cookie('session_id', new_sess)
+    return res
 
 
 if __name__ == "__main__":
