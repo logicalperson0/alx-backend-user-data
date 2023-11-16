@@ -68,6 +68,7 @@ class Auth:
         if des_user:
             des_user.session_id = None
             return None
+        return None
 
 
 def _hash_password(password: str) -> bytes:
