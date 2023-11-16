@@ -62,6 +62,16 @@ class Auth:
         except Exception:
             return None
 
+    def destroy_session(self, user_id: int) -> None:
+        """The method updates the corresponding user’s session ID to None"""
+        try:
+            des_user = self._db.find_user_by(user_id=id)
+            if des_user:
+                des_user.session_id = None
+                return None
+        except Exception:
+            return None
+
 
 def _hash_password(password: str) -> bytes:
     """The returned bytes is a salted hash of the input
