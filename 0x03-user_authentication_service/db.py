@@ -50,19 +50,17 @@ class DB:
     def find_user_by(self, **kwargs: Dict[str, str]) -> User:
         """returns the first row found in the users table as
         filtered by the method's input arguments"""
-        if kwargs is None:
-            raise InvalidRequestError
-        for k in kwargs.keys():
-            if not hasattr(User, k):
-                raise InvalidRequestError
+        query = self._session.query(User)
+
         try:
-            query = self._session.query(User).filter_by(**kwargs).first()
+            query_fil = query.filter_by(**kwargs).one()
+
+        except NoResultFound:
+            raise NoResultFound()
         except InvalidRequestError:
-            raise InvalidRequestError
-        if query is None:
-            raise NoResultFound
-        else:
-            return query
+            raise InvalidRequestError()
+
+        return query_fil
 
     def update_user(self, user_id: int, **kwargs: Dict[str, str]) -> None:
         """method that takes as argument a required user_id
