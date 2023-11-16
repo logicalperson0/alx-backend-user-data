@@ -64,8 +64,14 @@ class Auth:
 
     def destroy_session(self, user_id: int) -> None:
         """The method updates the corresponding user’s session ID to None"""
-        self._db.update_user(user_id, session_id=None)
-        return None
+        # self._db.update_user(user_id, session_id=None)
+        try:
+            des_user = self._db.find_user_by(id=user_id)
+            if des_user:
+                des_user.session_id = None
+                return None
+        except Exception:
+            return None
 
 
 def _hash_password(password: str) -> bytes:
