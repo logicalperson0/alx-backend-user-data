@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
+from typing import Dict
 
 from user import Base
 from user import User
@@ -46,7 +47,7 @@ class DB:
 
         return new_user
 
-    def find_user_by(self, **kwargs):
+    def find_user_by(self, **kwargs: Dict[str, str]) -> User:
         """returns the first row found in the users table as
         filtered by the method's input arguments"""
         query = self._session.query(User)
@@ -57,6 +58,13 @@ class DB:
         # except InvalidRequestError:
         #    raise InvalidRequestError()
         except NoResultFound:
-            raise NoResultFound
+            raise NoResultFound()
+        except InvalidRequestError:
+            raise InvalidRequestError()
 
         return query_fil
+
+    def update_user(self, user_id: int, **kwargs: Dict[str, str]) -> None:
+        """method that takes as argument a required user_id
+        integer and arbitrary keyword arguments, and returns None"""
+        
